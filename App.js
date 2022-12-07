@@ -1,5 +1,6 @@
-import * as eva from '@eva-design/eva';
 import { useColorScheme } from 'react-native';
+import { useState, useEffect } from 'react';
+import * as eva from '@eva-design/eva';
 import { ApplicationProvider } from '@ui-kitten/components';
 import {
   NavigationContainer,
@@ -8,17 +9,24 @@ import {
 } from '@react-navigation/native';
 
 import Main from './Components/Main';
+import { AppDataContext } from './contexts';
 
 export default function App() {
-  const scheme = useColorScheme();
-  console.log(scheme);
+  const [darkMode, setDarkMode] = useState();
+  // const scheme = useColorScheme();
+
+  // useEffect(() => {
+  //   setTheme(scheme);
+  // }, []);
 
   return (
-    <NavigationContainer theme={scheme === 'dark' ? DarkTheme : DefaultTheme}>
+    <NavigationContainer theme={darkMode ? DarkTheme : DefaultTheme}>
       <ApplicationProvider
         {...eva}
-        theme={scheme === 'dark' ? eva.dark : eva.light}>
-        <Main />
+        theme={darkMode ? eva.dark : eva.light}>
+        <AppDataContext.Provider value={{ darkMode, setDarkMode }}>
+          <Main />
+        </AppDataContext.Provider>
       </ApplicationProvider>
     </NavigationContainer>
   );
