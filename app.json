@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "my-app",
-    "slug": "my-app",
+    "name": "starting-strength",
+    "slug": "starting-strength",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -28,7 +28,7 @@
     },
     "web": {
       "favicon": "./assets/favicon.png",
-      "babel": { "include": [ "@ui-kitten/components" ] }
+      "build": { "babel": { "include": [ "@ui-kitten/components" ] }}
     }
   }
 }
