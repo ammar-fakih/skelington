@@ -1,14 +1,21 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { useTheme as useNavTheme } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
+import { Text, useTheme } from '@ui-kitten/components';
 
 import Events from './Events';
 import Settings from './Settings';
 import AddEvent from './AddEvent';
 
 const Tab = createBottomTabNavigator();
+const Stack = createNativeStackNavigator();
 
 export default function Main() {
+  const theme = useTheme();
+  const navTheme = useNavTheme();
+
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
@@ -22,14 +29,30 @@ export default function Main() {
           } else if (route.name === 'Add Event') {
             iconName = focused ? 'add-circle-sharp' : 'add-circle-outline';
           }
-
-          return <Ionicons name={iconName} size={size} color={color} />;
+          return <Ionicons name={iconName} size={size * 1.2} color={color} />;
         },
+        tabBarLabelStyle: {
+          fontSize: 15,
+        },
+        tabBarActiveTintColor: navTheme.dark
+          ? theme['color-primary-400']
+          : theme['color-primary-500'],
         headerShown: false,
+        tabBarStyle: {
+          height: 100,
+        },
       })}>
-      <Tab.Screen name="Events" component={Events} />
+      <Tab.Screen name="Events" component={EventsHandler} />
       <Tab.Screen name="Add Event" component={AddEvent} />
-      <Tab.Screen name="Settings" component={Settings} />
     </Tab.Navigator>
   );
 }
+
+const EventsHandler = () => {
+  return (
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="EventsPage" component={Events} />
+      <Stack.Screen name="Settings" component={Settings} />
+    </Stack.Navigator>
+  );
+};
