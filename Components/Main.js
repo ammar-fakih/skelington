@@ -42,7 +42,7 @@ export default function Main() {
         headerShown: false,
         tabBarStyle: {
           height: Platform.OS === 'ios' ? 100 : 80,
-          marginBottom: Platform.OS === 'ios' ? 0 : 20,
+          ...(Platform.OS === 'ios' ? {} : { paddingBottom: 10 }),
         },
       })}>
       <Tab.Screen name="Events" component={EventsHandler} />

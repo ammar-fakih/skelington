@@ -14,16 +14,33 @@ import MuddTheme from './theme/mudd.json';
 import Main from './Components/Main';
 import { AppDataContext } from './contexts';
 import Api from './apis';
+import { eventTypeOptions } from './constants';
 
 export default function App() {
   const [darkMode, setDarkMode] = useState();
   const [events, setEvents] = useState([]);
   const [eventsLoading, setEventsLoading] = useState(true);
+  const [initialLoad, setInitialLoad] = useState(true);
   const [renderedEvents, setRenderedEvents] = useState([]);
   const [eventsError, setEventsError] = useState();
+  const [typeCheckBoxes, setTypeCheckBoxes] = useState(eventTypeOptions);
   const scheme = useColorScheme();
 
-  const getEvents = async () => {
+  const refineList = (options) => {
+    let filteredList = events;
+    if (options.type) {
+      filteredList = filteredList.filter((event) =>
+        options.type.includes(event.type)
+      );
+    }
+    setRenderedEvents(filteredList);
+  };
+
+  const getEvents = async (initial) => {
+    if (initial) {
+      setInitialLoad(true);
+    }
+
     setEventsLoading(true);
     const response = await Api.getEventsApi();
     if (response?.events) {
@@ -33,6 +50,7 @@ export default function App() {
       setEventsError("Couldn't get events");
     }
     setEventsLoading(false);
+    setInitialLoad(false);
   };
 
   useEffect(() => {
@@ -42,7 +60,7 @@ export default function App() {
       setDarkMode(false);
     }
 
-    getEvents();
+    getEvents(true);
   }, []);
 
   return (
@@ -51,7 +69,17 @@ export default function App() {
         {...eva}
         theme={{ ...(darkMode ? eva.dark : eva.light), ...MuddTheme }}>
         <AppDataContext.Provider
-          value={{ events, getEvents, eventsLoading, darkMode, setDarkMode }}>
+          value={{
+            renderedEvents,
+            getEvents,
+            eventsLoading,
+            initialLoad,
+            darkMode,
+            setDarkMode,
+            refineList,
+            typeCheckBoxes,
+            setTypeCheckBoxes,
+          }}>
           <Main />
           <StatusBar style={darkMode ? 'light' : 'dark'} />
         </AppDataContext.Provider>

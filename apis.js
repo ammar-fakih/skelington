@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const apiUrl = 'https://rare-cougars-help-172-116-44-177.loca.lt';
+const apiUrl = 'https://ready-toes-fry-172-116-44-177.loca.lt';
 
 class Api {
   static async getEventsApi(limit = 15) {
@@ -9,7 +9,7 @@ class Api {
       const response = await axios.get(`${apiUrl}/events`);
       return response.data;
     } catch (error) {
-      console.log('Get Events Error: ', error.message);
+      console.log("Get Events Error: ", error.message);
       return error;
     }
   }

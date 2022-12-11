@@ -9,19 +9,19 @@ import {
 } from '@ui-kitten/components';
 import { AppDataContext } from '../contexts';
 import { FormatDate } from '../globalFunctions';
-import { TouchableOpacity } from 'react-native';
+import { RefreshControl, TouchableOpacity } from 'react-native';
 import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 import { useTheme } from '@ui-kitten/components';
 import Constants from 'expo-constants';
 
 export default function Events({ navigation }) {
-  const { events, eventsLoading, getEvents, darkMode } =
+  const { renderedEvents, eventsLoading, initialLoad, getEvents, darkMode } =
     React.useContext(AppDataContext);
   const theme = useTheme();
 
   const Header = (title) => (
     <Layout style={{ padding: 15 }}>
-      <Text category="h6">{title} </Text>
+      <Text category="h6">{title}</Text>
     </Layout>
   );
 
@@ -91,11 +91,13 @@ export default function Events({ navigation }) {
                 style={{
                   fontStyle: 'italics',
                   marginBottom: 2,
-                  color: theme['color-grey-600'],
+                  color: !darkMode
+                    ? theme['color-grey-600']
+                    : theme['color-grey-100'],
                 }}>
                 By {item.host}
               </Text>
-              <Text category="c1" style={{ color: theme['color-grey-200'] }}>
+              <Text category="c1" style={{ color: theme['color-grey-300'] }}>
                 {item.type}
               </Text>
             </Layout>
@@ -183,22 +185,30 @@ export default function Events({ navigation }) {
         </Layout>
       </TouchableOpacity>
       <Layout style={{ flex: 1 }}>
-        {eventsLoading ? (
+        {initialLoad ? (
           <Layout
             style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
             <Spinner size="medium" />
           </Layout>
-        ) : events.length > 0 ? (
+        ) : renderedEvents.length > 0 ? (
           <List
             contentContainerStyle={{ paddingVertical: 45 }}
-            onRefresh={getEvents}
-            refreshing={eventsLoading}
-            data={events}
+            refreshControl={
+              <RefreshControl
+                refreshing={eventsLoading}
+                onRefresh={getEvents}
+                title="Pull to refresh"
+                tintColor={theme['color-primary-500']}
+                titleColor={theme['color-primary-300']}
+              />
+            }
+            data={renderedEvents}
             renderItem={renderedEvent}
           />
         ) : (
-          <Layout style={{ width: '100%', alignItems: 'center' }}>
-            <Text>{`No events :(`}</Text>
+          <Layout
+            style={{ width: '100%', alignItems: 'center', marginTop: 30 }}>
+            <Text category="s1">{`No events`}</Text>
             <Button appearance="ghost" onPress={getEvents}>
               Refresh
             </Button>

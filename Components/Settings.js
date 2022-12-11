@@ -64,6 +64,9 @@ export default function Settings({ navigation }) {
               Dark Mode
             </Toggle>
           </Layout>
+          <Text category="c1" style={{ position: 'absolute', bottom: 0 }}>
+            Made by Ammar Fakih
+          </Text>
         </Layout>
       </Layout>
     </TouchableWithoutFeedback>
