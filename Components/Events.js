@@ -12,6 +12,7 @@ import { FormatDate } from '../globalFunctions';
 import { TouchableOpacity } from 'react-native';
 import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 import { useTheme } from '@ui-kitten/components';
+import Constants from 'expo-constants';
 
 export default function Events({ navigation }) {
   const { events, eventsLoading, getEvents, darkMode } =
@@ -39,11 +40,24 @@ export default function Events({ navigation }) {
         <Card
           disabled
           style={{
+            borderRadius: 15,
             marginHorizontal: 20,
-            marginBottom: 20,
+            marginBottom: 36,
           }}
-          header={() => Header(item.title)}
-          status="primary">
+          accent={({ style }) => {
+            // console.log(status);
+            return (
+              <Layout
+                style={{
+                  height: 5,
+                  width: '100%',
+                  backgroundColor: style.backgroundColor,
+                }}
+              />
+            );
+          }}
+          status="primary"
+          header={() => Header(item.title)}>
           <Layout
             style={{
               flex: 1,
@@ -74,10 +88,16 @@ export default function Events({ navigation }) {
             <Layout>
               <Text
                 category="c2"
-                style={{ fontStyle: 'italics', marginBottom: 2 }}>
+                style={{
+                  fontStyle: 'italics',
+                  marginBottom: 2,
+                  color: theme['color-grey-600'],
+                }}>
                 By {item.host}
               </Text>
-              <Text category="c1">{item.type}</Text>
+              <Text category="c1" style={{ color: theme['color-grey-200'] }}>
+                {item.type}
+              </Text>
             </Layout>
             <Layout
               style={{
@@ -111,13 +131,11 @@ export default function Events({ navigation }) {
         style={{
           flexDirection: 'row',
           justifyContent: 'space-between',
-          marginTop: 60,
-          marginBottom: 20,
-          marginHorizontal: 20,
+          paddingTop: Constants.statusBarHeight + 10,
+          paddingBottom: 10,
+          paddingHorizontal: 20,
         }}>
-        <Text category="h2">
-          Mudd Board
-        </Text>
+        <Text category="h2">Athena Board</Text>
         <TouchableOpacity
           onPress={() => {
             navigation.navigate('Settings');
@@ -129,6 +147,41 @@ export default function Events({ navigation }) {
           />
         </TouchableOpacity>
       </Layout>
+      <TouchableOpacity
+        style={{
+          width: 90,
+          position: 'absolute',
+          top: Constants.statusBarHeight + 58,
+          zIndex: 1,
+        }}
+        onPress={() => {
+          navigation.navigate('FilterEvents');
+        }}>
+        <Layout
+          style={{
+            flex: 1,
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'center',
+            borderBottomRightRadius: 10,
+            shadowColor: 'black',
+            shadowOpacity: 0.05,
+            shadowRadius: 5,
+            shadowOffset: {
+              height: 10,
+              width: 0,
+            },
+          }}>
+          <Ionicons
+            name="filter"
+            size={30}
+            color={theme['color-primary-500']}
+          />
+          <Text category="label" style={{ marginLeft: 3 }}>
+            Filter
+          </Text>
+        </Layout>
+      </TouchableOpacity>
       <Layout style={{ flex: 1 }}>
         {eventsLoading ? (
           <Layout
@@ -137,7 +190,7 @@ export default function Events({ navigation }) {
           </Layout>
         ) : events.length > 0 ? (
           <List
-            contentContainerStyle={{ paddingVertical: 20 }}
+            contentContainerStyle={{ paddingVertical: 45 }}
             onRefresh={getEvents}
             refreshing={eventsLoading}
             data={events}
@@ -145,7 +198,7 @@ export default function Events({ navigation }) {
           />
         ) : (
           <Layout style={{ width: '100%', alignItems: 'center' }}>
-            <Text>No events :(</Text>
+            <Text>{`No events :(`}</Text>
             <Button appearance="ghost" onPress={getEvents}>
               Refresh
             </Button>

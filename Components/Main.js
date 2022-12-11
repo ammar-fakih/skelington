@@ -4,10 +4,12 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useTheme as useNavTheme } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
 import { Text, useTheme } from '@ui-kitten/components';
+import { Platform } from 'react-native';
 
 import Events from './Events';
 import Settings from './Settings';
 import AddEvent from './AddEvent';
+import FilterEvents from './FilterEvents';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -39,7 +41,8 @@ export default function Main() {
           : theme['color-primary-500'],
         headerShown: false,
         tabBarStyle: {
-          height: 100,
+          height: Platform.OS === 'ios' ? 100 : 80,
+          marginBottom: Platform.OS === 'ios' ? 0 : 20,
         },
       })}>
       <Tab.Screen name="Events" component={EventsHandler} />
@@ -53,6 +56,9 @@ const EventsHandler = () => {
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="EventsPage" component={Events} />
       <Stack.Screen name="Settings" component={Settings} />
+      <Stack.Group screenOptions={{ presentation: 'modal' }}>
+        <Stack.Screen name="FilterEvents" component={FilterEvents} />
+      </Stack.Group>
     </Stack.Navigator>
   );
 };

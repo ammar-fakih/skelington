@@ -10,6 +10,7 @@ import {
 } from '@ui-kitten/components';
 import { ScrollView } from 'react-native';
 import { useState } from 'react';
+import Constants from 'expo-constants';
 
 const collegeOptions = [
   'Harvey Mudd',
@@ -28,7 +29,12 @@ export default function AddEvent() {
 
   return (
     <Layout style={{ flex: 1 }}>
-      <Layout style={{ marginTop: 60, marginBottom: 20, marginLeft: 20 }}>
+      <Layout
+        style={{
+          marginTop: Constants.statusBarHeight + 10,
+          marginBottom: 20,
+          marginLeft: 20,
+        }}>
         <Text category="h2">Submit an Event</Text>
       </Layout>
       <ScrollView>

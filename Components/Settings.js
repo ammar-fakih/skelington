@@ -15,6 +15,7 @@ import {
 import { AppDataContext } from '../contexts';
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '@ui-kitten/components';
+import Constants from 'expo-constants';
 
 export default function Settings({ navigation }) {
   const { darkMode, setDarkMode } = useContext(AppDataContext);
@@ -28,7 +29,12 @@ export default function Settings({ navigation }) {
         Keyboard.dismiss();
       }}>
       <Layout style={{ flex: 1 }}>
-        <Layout style={{ flexDirection: 'row', marginTop: 60, marginLeft: 20 }}>
+        <Layout
+          style={{
+            flexDirection: 'row',
+            marginTop: Constants.statusBarHeight + 10,
+            marginLeft: 20,
+          }}>
           <TouchableOpacity
             style={{ paddingRight: 10 }}
             onPress={() => {
@@ -36,7 +42,7 @@ export default function Settings({ navigation }) {
             }}>
             <Ionicons
               name="ios-arrow-back-sharp"
-              size={40}
+              size={37}
               color={theme['color-primary-400']}
             />
           </TouchableOpacity>
@@ -48,6 +54,7 @@ export default function Settings({ navigation }) {
             label={'Feedback'}
             style={{ marginVertical: 20 }}
             multiline
+            height={100}
             placeholder="We love hearing feedback..."
           />
           <Button style={{ marginBottom: 20 }}>Submit Feedback</Button>
