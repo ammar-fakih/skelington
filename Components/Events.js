@@ -1,6 +1,6 @@
 import { Layout, Text } from '@ui-kitten/components';
 
-export default function HomeScreen() {
+export default function Events() {
   return (
     <Layout style={{ flex: 1, alignItems: 'center' }}>
       <Layout style={{ flex: 1, marginTop: 60 }}>

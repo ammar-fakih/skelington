@@ -9,7 +9,7 @@ import {
 } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-
+import MuddTheme from './theme.json';
 import Main from './Components/Main';
 import { AppDataContext } from './contexts';
 
