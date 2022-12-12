@@ -9,12 +9,14 @@ import {
   DarkTheme,
 } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+// import { PASSWORD } from '@env';
 
 import MuddTheme from './theme/mudd.json';
 import Main from './Components/Main';
 import { AppDataContext } from './contexts';
 import Api from './apis';
 import { eventTypeOptions } from './constants';
+import Constants from 'expo-constants';
 
 export default function App() {
   const [darkMode, setDarkMode] = useState();
@@ -24,7 +26,18 @@ export default function App() {
   const [renderedEvents, setRenderedEvents] = useState([]);
   const [eventsError, setEventsError] = useState();
   const [typeCheckBoxes, setTypeCheckBoxes] = useState(eventTypeOptions);
+  const [password, setPassword] = useState('');
   const scheme = useColorScheme();
+
+  useEffect(() => {
+    if (scheme === 'dark') {
+      setDarkMode(true);
+    } else {
+      setDarkMode(false);
+    }
+
+    getEvents(true);
+  }, []);
 
   const refineList = (options) => {
     let filteredList = events;
@@ -53,15 +66,14 @@ export default function App() {
     setInitialLoad(false);
   };
 
-  useEffect(() => {
-    if (scheme === 'dark') {
-      setDarkMode(true);
+  const handlePostEvent = async (event) => {
+    const response = await Api.postEventApi(event);
+    if (response?.event) {
+      return true;
     } else {
-      setDarkMode(false);
+      return false;
     }
-
-    getEvents(true);
-  }, []);
+  };
 
   return (
     <NavigationContainer theme={darkMode ? DarkTheme : DefaultTheme}>
@@ -79,6 +91,7 @@ export default function App() {
             refineList,
             typeCheckBoxes,
             setTypeCheckBoxes,
+            handlePostEvent,
           }}>
           <Main />
           <StatusBar style={darkMode ? 'light' : 'dark'} />

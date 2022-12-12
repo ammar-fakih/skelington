@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "starting-strength",
-    "slug": "starting-strength",
+    "name": "athena-board",
+    "slug": "athena-board",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -28,7 +28,18 @@
     },
     "web": {
       "favicon": "./assets/favicon.png",
-      "build": { "babel": { "include": [ "@ui-kitten/components" ] }}
+      "build": {
+        "babel": {
+          "include": [
+            "@ui-kitten/components"
+          ]
+        }
+      }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "25f03800-f323-4936-93dd-6037d058bceb"
+      }
     }
   }
 }

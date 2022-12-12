@@ -56,6 +56,7 @@ export default function Settings({ navigation }) {
             multiline
             height={100}
             placeholder="We love hearing feedback..."
+            onChangeText={setFeedback}
           />
           <Button style={{ marginBottom: 20 }}>Submit Feedback</Button>
           <Divider />

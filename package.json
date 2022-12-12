@@ -1,5 +1,5 @@
 {
-  "name": "my-app",
+  "name": "athenaboard",
   "version": "1.0.0",
   "main": "node_modules/expo/AppEntry.js",
   "scripts": {
@@ -12,6 +12,7 @@
     "@eva-design/eva": "^2.1.1",
     "@expo/webpack-config": "^0.17.3",
     "@react-native-async-storage/async-storage": "^1.17.11",
+    "@react-native-community/datetimepicker": "6.5.2",
     "@react-navigation/bottom-tabs": "^6.4.3",
     "@react-navigation/material-bottom-tabs": "^6.2.8",
     "@react-navigation/native": "^6.0.16",
@@ -19,7 +20,6 @@
     "@ui-kitten/components": "^5.1.2",
     "expo": "^47.0.8",
     "expo-device": "~5.0.0",
-    "expo-keep-awake": "~11.0.1",
     "expo-status-bar": "~1.4.2",
     "install": "^0.13.0",
     "react": "18.1.0",

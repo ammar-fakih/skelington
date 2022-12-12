@@ -8,7 +8,7 @@ import {
   Text,
 } from '@ui-kitten/components';
 import { AppDataContext } from '../contexts';
-import { FormatDate } from '../globalFunctions';
+import { FormatDate, FormatTimeRange } from '../globalFunctions';
 import { RefreshControl, TouchableOpacity } from 'react-native';
 import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 import { useTheme } from '@ui-kitten/components';
@@ -78,11 +78,6 @@ export default function Events({ navigation }) {
             <Text category="p1" style={{ flex: 2 }}>
               {item.description}
             </Text>
-            <Text style={{ flex: 1, textAlign: 'right' }}>
-              {item.start_times
-                ? `${item.start_times.split(',').slice(0, 1)}-{item.end_time}}`
-                : ''}
-            </Text>
           </Layout>
           <Layout style={{ flexDirection: 'row', width: '100%' }}>
             <Layout>
@@ -101,26 +96,32 @@ export default function Events({ navigation }) {
                 {item.type}
               </Text>
             </Layout>
-            <Layout
-              style={{
-                flex: 1,
-                flexDirection: 'row',
-                justifyContent: 'flex-end',
-                flexWrap: 'wrap',
-              }}>
-              {item.schools.split(',').map((school, i) => (
-                <Layout
-                  key={i}
-                  style={{
-                    margin: 2,
-                    borderRadius: 6,
-                    backgroundColor: theme['color-primary-600'],
-                    padding: 4,
-                  }}>
-                  <Text style={{ color: 'white' }}>{school}</Text>
-                </Layout>
-              ))}
-            </Layout>
+            <Text style={{ flex: 1, textAlign: 'right' }}>
+              {item.start_time
+                ? FormatTimeRange(item.start_time, item.end_time)
+                : null}
+            </Text>
+          </Layout>
+          <Layout
+            style={{
+              flex: 1,
+              marginTop: 4,
+              flexDirection: 'row',
+              justifyContent: 'flex-end',
+              flexWrap: 'wrap',
+            }}>
+            {item.schools.split(',').map((school, i) => (
+              <Layout
+                key={i}
+                style={{
+                  margin: 2,
+                  borderRadius: 6,
+                  backgroundColor: theme['color-primary-600'],
+                  padding: 4,
+                }}>
+                <Text style={{ color: 'white' }}>{school}</Text>
+              </Layout>
+            ))}
           </Layout>
         </Card>
       </Layout>
