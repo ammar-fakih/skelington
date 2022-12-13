@@ -9,6 +9,7 @@ import {
   DarkTheme,
 } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import NetInfo from '@react-native-community/netinfo';
 // import { PASSWORD } from '@env';
 
 import MuddTheme from './theme/mudd.json';
@@ -16,7 +17,6 @@ import Main from './Components/Main';
 import { AppDataContext } from './contexts';
 import Api from './apis';
 import { eventTypeOptions } from './constants';
-import Constants from 'expo-constants';
 
 export default function App() {
   const [darkMode, setDarkMode] = useState();
@@ -49,16 +49,40 @@ export default function App() {
     setRenderedEvents(filteredList);
   };
 
+  // Set {showDate} to true for the first event in a day
+  const showDate = (events) => {
+    let usedDates = [];
+    events.forEach((event, index) => {
+      if (!usedDates.includes(event.date)) {
+        usedDates.push(event.date);
+        event.showDate = true;
+      } else {
+        event.showDate = false;
+      }
+    });
+    return events;
+  };
+
   const getEvents = async (initial) => {
     if (initial) {
       setInitialLoad(true);
     }
-
     setEventsLoading(true);
+
+    // Check for internet connection
+    const state = await NetInfo.fetch();
+
+    if (!state.isConnected) {
+      setEventsError('No internet connection');
+      setEventsLoading(false);
+      setInitialLoad(false);
+      return;
+    }
+
     const response = await Api.getEventsApi();
     if (response?.events) {
-      setEvents(response.events);
-      setRenderedEvents(response.events);
+      setEvents(showDate(response.events));
+      setRenderedEvents(showDate(response.events));
     } else {
       setEventsError("Couldn't get events");
     }
@@ -92,6 +116,7 @@ export default function App() {
             typeCheckBoxes,
             setTypeCheckBoxes,
             handlePostEvent,
+            eventsError,
           }}>
           <Main />
           <StatusBar style={darkMode ? 'light' : 'dark'} />

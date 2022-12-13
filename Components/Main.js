@@ -3,7 +3,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useTheme as useNavTheme } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
-import { Text, useTheme } from '@ui-kitten/components';
+import { useTheme } from '@ui-kitten/components';
 import { Platform } from 'react-native';
 
 import Events from './Events';
@@ -21,6 +21,7 @@ export default function Main() {
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
+        tabBarHideOnKeyboard: true,
         tabBarIcon: ({ focused, color, size }) => {
           let iconName;
 

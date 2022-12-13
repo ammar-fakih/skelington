@@ -16,12 +16,14 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
   KeyboardAvoidingView,
+  Platform,
 } from 'react-native';
 import { useState, useContext } from 'react';
 import Constants from 'expo-constants';
 import DateTimePicker from '@react-native-community/datetimepicker';
 
 import { AppDataContext } from '../contexts';
+import { formatAMPM } from '../globalFunctions';
 
 const collegeOptions = [
   'Harvey Mudd',
@@ -50,7 +52,12 @@ export default function AddEvent() {
   const [error, setError] = useState('');
   const [successMsg, setSuccessMsg] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [showTimePickerAndroid, setShowTimePickerAndroid] = useState(false);
   const theme = useTheme();
+  const timePickers = {
+    'Start Time': { time: startTime, setTime: setStartTime },
+    'End Time': { time: endTime, setTime: setEndTime },
+  };
 
   const onSubmit = async () => {
     setIsLoading(true);
@@ -129,11 +136,94 @@ export default function AddEvent() {
     setIsLoading(false);
   };
 
+  const renderTimePickers = (times, os) => {
+    if (os === 'web') {
+      return null;
+    }
+    if (os === 'android') {
+      return (
+        <Layout
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'space-around',
+            marginVertical: 10,
+            opacity: timeToggled ? 1 : 0.5,
+          }}>
+          {Object.entries(times).map(([label, { time, setTime }], i) => (
+            <Layout key={i} style={{ alignItems: 'center' }}>
+              <Text category="label" style={{ marginBottom: 5 }}>
+                {label}
+              </Text>
+              <Button
+                disabled={!timeToggled}
+                onPress={() => {
+                  setShowTimePickerAndroid(true);
+                }}>
+                {formatAMPM(time)}
+              </Button>
+              {showTimePickerAndroid && (
+                <DateTimePicker
+                  mode="time"
+                  onChange={(change, date) => {
+                    setTime(date);
+                    setShowTimePickerAndroid(false);
+                  }}
+                  value={time}
+                />
+              )}
+            </Layout>
+          ))}
+          <CheckBox
+            style={{ alignSelf: 'flex-end', marginTop: 5 }}
+            checked={timeToggled}
+            onChange={setTimeToggled}>
+            <Text>Toggle Time</Text>
+          </CheckBox>
+        </Layout>
+      );
+    }
+    if (os === 'ios') {
+      return (
+        <Layout
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'space-around',
+            marginVertical: 10,
+            opacity: timeToggled ? 1 : 0.5,
+          }}>
+          {Object.entries(times).map(([label, { time, setTime }], i) => (
+            <Layout key={i} style={{ alignItems: 'center' }}>
+              <Text category="label" style={{ marginBottom: 5 }}>
+                {label}
+              </Text>
+
+              <DateTimePicker
+                disabled={!timeToggled}
+                mode="time"
+                onChange={(change, date) => {
+                  setTime(date);
+                }}
+                value={time}
+              />
+            </Layout>
+          ))}
+          <CheckBox
+            style={{ alignSelf: 'flex-end', marginTop: 5 }}
+            checked={timeToggled}
+            onChange={setTimeToggled}>
+            <Text>Toggle Time</Text>
+          </CheckBox>
+        </Layout>
+      );
+    }
+  };
+
   return (
     <TouchableWithoutFeedback
       onPress={() => {
         Keyboard.dismiss();
-      }}>
+      }}
+      style={{ flex: 1 }}>
       <Layout style={{ flex: 1 }}>
         <Layout
           style={{
@@ -144,10 +234,10 @@ export default function AddEvent() {
         </Layout>
         <KeyboardAvoidingView
           style={{ flex: 1, justifyContent: 'center' }}
-          behavior="padding"
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
           enabled>
           <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
-            <Layout style={{ padding: 30 }}>
+            <Layout style={{ padding: 30, paddingBottom: 0 }}>
               <Input
                 label={<Text>Title</Text>}
                 placeholder={'Event Title'}
@@ -158,7 +248,6 @@ export default function AddEvent() {
               <Input
                 label={'Description'}
                 multiline
-                height={60}
                 placeholder={'Describe the event...'}
                 style={{ marginVertical: 10 }}
                 value={description}
@@ -210,46 +299,6 @@ export default function AddEvent() {
                 style={{ marginVertical: 10 }}
               />
               {/* Time */}
-              <Layout
-                style={{
-                  flexDirection: 'row',
-                  justifyContent: 'space-around',
-                  marginVertical: 10,
-                  opacity: timeToggled ? 1 : 0.5,
-                }}>
-                <Layout style={{ alignItems: 'center' }}>
-                  <Text category="label" style={{ marginBottom: 5 }}>
-                    Start Time
-                  </Text>
-                  <DateTimePicker
-                    disabled={!timeToggled}
-                    mode="time"
-                    onChange={(change, date) => {
-                      setStartTime(date);
-                    }}
-                    value={startTime}
-                  />
-                </Layout>
-                <Layout style={{ alignItems: 'center' }}>
-                  <Text category="label" style={{ marginBottom: 5 }}>
-                    End Time
-                  </Text>
-                  <DateTimePicker
-                    disabled={!timeToggled}
-                    mode="time"
-                    onChange={(change, date) => {
-                      setEndTime(date);
-                    }}
-                    value={endTime}
-                  />
-                </Layout>
-              </Layout>
-              <CheckBox
-                style={{ alignSelf: 'flex-end', marginTop: 5 }}
-                checked={timeToggled}
-                onChange={setTimeToggled}>
-                <Text>Toggle Time</Text>
-              </CheckBox>
 
               <Input
                 label={'Host'}
@@ -258,7 +307,7 @@ export default function AddEvent() {
                 value={host}
                 onChangeText={setHost}
               />
-
+              {renderTimePickers(timePickers, Platform.OS)}
               <Input
                 label={'Email'}
                 placeholder={'Used for contact purposes'}

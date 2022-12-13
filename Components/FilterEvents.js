@@ -1,6 +1,6 @@
 import { Button, CheckBox, Layout, Text } from '@ui-kitten/components';
-import { TouchableOpacity } from 'react-native';
-import { useState, useContext, useEffect } from 'react';
+import { TouchableOpacity, Platform } from 'react-native';
+import { useContext } from 'react';
 import { useTheme } from '@ui-kitten/components';
 import { Ionicons } from '@expo/vector-icons';
 
@@ -44,8 +44,8 @@ export default function ({ navigation }) {
             navigation.goBack();
           }}>
           <Ionicons
-            name="ios-arrow-down-sharp"
-            size={37}
+            name={Platform.OS === 'ios' ? 'ios-arrow-down-sharp' : 'ios-close'}
+            size={40}
             color={theme['color-primary-400']}
           />
         </TouchableOpacity>
