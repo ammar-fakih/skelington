@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const apiUrl = 'https://every-apes-joke-172-116-44-177.loca.lt';
+const apiUrl = 'https://cruel-wombats-watch-134-173-192-70.loca.lt';
 
 class Api {
   static async getEventsApi(limit = 15) {

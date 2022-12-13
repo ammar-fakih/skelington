@@ -92,9 +92,6 @@ export default function Events({ navigation }) {
                 }}>
                 By {item.host}
               </Text>
-              <Text category="c1" style={{ color: theme['color-grey-300'] }}>
-                {item.type}
-              </Text>
             </Layout>
             <Text style={{ flex: 1, textAlign: 'right' }}>
               {item.start_time
