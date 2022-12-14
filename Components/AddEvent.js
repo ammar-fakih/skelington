@@ -17,6 +17,7 @@ import {
   Keyboard,
   KeyboardAvoidingView,
   Platform,
+  Alert,
 } from 'react-native';
 import { useState, useContext } from 'react';
 import Constants from 'expo-constants';
@@ -131,6 +132,10 @@ export default function AddEvent() {
       setError('Error submitting event');
     } else {
       setSuccessMsg('Event submitted successfully');
+      Alert.alert(
+        'Event submitted successfully',
+        'An admin will review it soon'
+      );
       setError('');
     }
     setIsLoading(false);

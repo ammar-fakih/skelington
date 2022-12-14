@@ -22,6 +22,8 @@ export default function Events({ navigation }) {
     getEvents,
     darkMode,
     eventsError,
+    devPass,
+    unapprovedEvents,
   } = React.useContext(AppDataContext);
   const theme = useTheme();
 
@@ -166,7 +168,7 @@ export default function Events({ navigation }) {
           paddingBottom: 10,
           paddingHorizontal: 20,
         }}>
-        <Text category="h2">Athena Board</Text>
+        <Text category="h2">Athena Board{devPass ? ' dev' : ''}</Text>
         <TouchableOpacity
           onPress={() => {
             navigation.navigate('Settings');
@@ -214,6 +216,14 @@ export default function Events({ navigation }) {
         </Layout>
       </TouchableOpacity>
       <Layout style={{ flex: 1 }}>
+        {unapprovedEvents.length > 0 ? (
+          <Layout>
+            <Text category="h5" style={{ marginTop: 30 }}>
+              You have {unapprovedEvents.length} unapproved events.
+            </Text>
+            <List data={unapprovedEvents} renderItem={renderedEvent} />
+          </Layout>
+        ) : null}
         {initialLoad ? (
           <Layout
             style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>

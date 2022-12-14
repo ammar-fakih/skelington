@@ -20,24 +20,64 @@ import { eventTypeOptions } from './constants';
 
 export default function App() {
   const [darkMode, setDarkMode] = useState();
+  const [useUserTheme, setUseUserTheme] = useState(false);
   const [events, setEvents] = useState([]);
   const [eventsLoading, setEventsLoading] = useState(true);
   const [initialLoad, setInitialLoad] = useState(true);
   const [renderedEvents, setRenderedEvents] = useState([]);
   const [eventsError, setEventsError] = useState();
   const [typeCheckBoxes, setTypeCheckBoxes] = useState(eventTypeOptions);
-  const [password, setPassword] = useState('');
+  const [devPass, setDevPass] = useState(null);
+  const [unapprovedEvents, setUnapprovedEvents] = useState([]);
   const scheme = useColorScheme();
 
   useEffect(() => {
-    if (scheme === 'dark') {
-      setDarkMode(true);
-    } else {
-      setDarkMode(false);
-    }
-
     getEvents(true);
+    setTheme();
+    getDevPass();
   }, []);
+
+  useEffect(() => {
+    if (devPass) {
+      getUnapprovedEvents();
+    }
+  }, [devPass]);
+
+  const getUnapprovedEvents = async () => {
+    const data = await Api.getUnapprovedEventsApi(devPass);
+    
+    if (data.events) {
+      setUnapprovedEvents(data.events);
+    }
+  }
+
+
+  const getDevPass = async () => {
+    const pass = await AsyncStorage.getItem('devPass');
+    if (pass) {
+      setDevPass(pass);
+    }
+  };
+
+  const setTheme = async () => {
+    const userThemeSetting = await AsyncStorage.getItem('userTheme');
+    if (userThemeSetting) {
+      if (userThemeSetting === 'false') {
+        // Don't use user theme
+        setUseUserTheme(false);
+        setDarkMode(scheme === 'dark');
+      } else {
+        // Use user theme
+        setUseUserTheme(true);
+        setDarkMode(userThemeSetting === 'dark');
+      }
+    } else {
+      // If no system theme setting, use the system theme
+      setUseUserTheme(false);
+      setDarkMode(scheme === 'dark');
+      AsyncStorage.setItem('userTheme', 'false');
+    }
+  };
 
   const refineList = (options) => {
     let filteredList = events;
@@ -117,6 +157,12 @@ export default function App() {
             setTypeCheckBoxes,
             handlePostEvent,
             eventsError,
+            useUserTheme,
+            setUseUserTheme,
+            devPass,
+            setDevPass,
+            unapprovedEvents,
+            getUnapprovedEvents,
           }}>
           <Main />
           <StatusBar style={darkMode ? 'light' : 'dark'} />
