@@ -114,7 +114,7 @@ export default function Settings({ navigation }) {
             <Toggle
               checked={!useUserTheme}
               onChange={() => {
-                if (!useUserTheme) {
+                if (useUserTheme) {
                   AsyncStorage.setItem('userTheme', 'false');
                   setDarkMode(scheme === 'dark');
                   setUseUserTheme(false);
