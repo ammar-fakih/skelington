@@ -37,7 +37,7 @@ const collegeOptions = [
 const typeOptions = ['Academic', 'Social', 'Party', 'Sports', 'Other'];
 
 export default function AddEvent() {
-  const { handlePostEvent } = useContext(AppDataContext);
+  const { handlePostEvent, darkMode } = useContext(AppDataContext);
 
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
@@ -224,118 +224,110 @@ export default function AddEvent() {
   };
 
   return (
-    <TouchableWithoutFeedback
-      onPress={() => {
-        Keyboard.dismiss();
-      }}
-      style={{ flex: 1 }}>
-      <Layout style={{ flex: 1 }}>
-        <Layout
-          style={{
-            marginTop: Constants.statusBarHeight + 10,
-            marginLeft: 20,
-          }}>
-          <Text category="h2">Submit an Event</Text>
-        </Layout>
-        <KeyboardAvoidingView
-          style={{ flex: 1, justifyContent: 'center' }}
-          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-          enabled>
-          <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
-            <Layout style={{ padding: 30, paddingBottom: 0 }}>
-              <Input
-                label={<Text>Title</Text>}
-                placeholder={'Event Title'}
-                style={{ marginVertical: 10 }}
-                value={title}
-                onChangeText={setTitle}
-              />
-              <Input
-                label={'Description'}
-                multiline
-                placeholder={'Describe the event...'}
-                style={{ marginVertical: 10 }}
-                value={description}
-                onChangeText={setDescription}
-              />
-              <Select
-                multiSelect
-                label={'College'}
-                onPress={() => {
-                  Keyboard.dismiss();
-                }}
-                onSelect={(index) => setCollegeIndex(index)}
-                selectedIndex={collegeIndex}
-                value={collegeIndex
-                  .map((index) => collegeOptions[index.row])
-                  .join(', ')}
-                style={{ marginVertical: 10 }}>
-                {collegeOptions.map((college, i) => (
-                  <SelectItem key={i} title={college} />
-                ))}
-              </Select>
-
-              <Select
-                label={'Type'}
-                onPress={() => {
-                  Keyboard.dismiss();
-                }}
-                placeholder={'Select Type'}
-                onSelect={(typeIndex) => setTypeIndex(typeIndex)}
-                selectedIndex={typeIndex}
-                value={typeOptions[typeIndex.row]}
-                style={{ marginVertical: 10 }}>
-                {typeOptions.map((college, i) => (
-                  <SelectItem key={i} title={college} />
-                ))}
-              </Select>
-              <Input
-                label={'Location'}
-                placeholder={'Ex: North courtyard'}
-                value={location}
-                onChangeText={setLocation}
-                style={{ marginVertical: 10 }}
-              />
-              <Datepicker
-                label={'Date'}
-                onSelect={(nextDate) => setDate(nextDate)}
-                date={date}
-                placement="top"
-                style={{ marginVertical: 10 }}
-              />
-              {/* Time */}
-
-              <Input
-                label={'Host'}
-                placeholder={'Ex: John Doe'}
-                style={{ marginVertical: 10 }}
-                value={host}
-                onChangeText={setHost}
-              />
-              {renderTimePickers(timePickers, Platform.OS)}
-              <Input
-                label={'Email'}
-                placeholder={'Used for contact purposes'}
-                style={{ marginVertical: 10 }}
-                value={email}
-                onChangeText={setEmail}
-              />
-
-              {error ? (
-                <Text style={{ color: theme['color-danger-500'] }}>
-                  {error}
-                </Text>
-              ) : null}
-
-              {isLoading ? <Spinner size="small" status="warning" /> : null}
-
-              <Button onPress={onSubmit} style={{ marginVertical: 30 }}>
-                Submit Event
-              </Button>
-            </Layout>
-          </ScrollView>
-        </KeyboardAvoidingView>
+    <Layout style={{ flex: 1 }}>
+      <Layout
+        style={{
+          marginTop: Constants.statusBarHeight + 10,
+          marginLeft: 20,
+        }}>
+        <Text category="h2">Submit an Event</Text>
       </Layout>
-    </TouchableWithoutFeedback>
+      <KeyboardAvoidingView
+        style={{ flex: 1, justifyContent: 'center' }}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        enabled>
+        <ScrollView>
+          <Layout style={{ padding: 30, paddingBottom: 0 }}>
+            <Input
+              label={<Text>Title</Text>}
+              placeholder={'Event Title'}
+              style={{ marginVertical: 10 }}
+              value={title}
+              onChangeText={setTitle}
+            />
+            <Input
+              label={'Description'}
+              multiline
+              placeholder={'Describe the event...'}
+              style={{ marginVertical: 10 }}
+              value={description}
+              onChangeText={setDescription}
+            />
+            <Select
+              multiSelect
+              label={'College'}
+              onPress={() => {
+                Keyboard.dismiss();
+              }}
+              onSelect={(index) => setCollegeIndex(index)}
+              selectedIndex={collegeIndex}
+              value={collegeIndex
+                .map((index) => collegeOptions[index.row])
+                .join(', ')}
+              style={{ marginVertical: 10 }}>
+              {collegeOptions.map((college, i) => (
+                <SelectItem key={i} title={college} />
+              ))}
+            </Select>
+
+            <Select
+              label={'Type'}
+              onPress={() => {
+                Keyboard.dismiss();
+              }}
+              placeholder={'Select Type'}
+              onSelect={(typeIndex) => setTypeIndex(typeIndex)}
+              selectedIndex={typeIndex}
+              value={typeOptions[typeIndex.row]}
+              style={{ marginVertical: 10 }}>
+              {typeOptions.map((college, i) => (
+                <SelectItem key={i} title={college} />
+              ))}
+            </Select>
+            <Input
+              label={'Location'}
+              placeholder={'Ex: North courtyard'}
+              value={location}
+              onChangeText={setLocation}
+              style={{ marginVertical: 10 }}
+            />
+            <Datepicker
+              label={'Date'}
+              onSelect={(nextDate) => setDate(nextDate)}
+              date={date}
+              placement="top"
+              style={{ marginVertical: 10 }}
+            />
+            {/* Time */}
+
+            <Input
+              label={'Host'}
+              placeholder={'Ex: John Doe'}
+              style={{ marginVertical: 10 }}
+              value={host}
+              onChangeText={setHost}
+            />
+            {renderTimePickers(timePickers, Platform.OS)}
+            <Input
+              label={'Email'}
+              placeholder={'Used for contact purposes'}
+              style={{ marginVertical: 10 }}
+              value={email}
+              onChangeText={setEmail}
+            />
+
+            {error ? (
+              <Text style={{ color: theme['color-danger-500'] }}>{error}</Text>
+            ) : null}
+
+            {isLoading ? <Spinner size="small" status="warning" /> : null}
+
+            <Button onPress={onSubmit} style={{ marginVertical: 30 }}>
+              Submit Event
+            </Button>
+          </Layout>
+        </ScrollView>
+      </KeyboardAvoidingView>
+    </Layout>
   );
 }
