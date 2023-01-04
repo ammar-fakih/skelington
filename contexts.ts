@@ -1,3 +1,11 @@
-import React from 'react';
+import { createContext } from 'react';
 
-export const AppDataContext = React.createContext();
+interface AppDataContextInterface {
+  darkMode: boolean;
+  setDarkMode: (darkMode: boolean) => void;
+  useUserTheme: boolean;
+  setUseUserTheme: (useUserTheme: boolean) => void;
+}
+export const AppDataContext = createContext<AppDataContextInterface | null>(
+  null
+);

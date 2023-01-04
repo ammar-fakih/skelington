@@ -6,7 +6,7 @@ import {
   Text,
   Toggle,
 } from '@ui-kitten/components';
-import { useContext, useState, useEffect } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import {
   TouchableWithoutFeedback,
   Keyboard,
@@ -18,45 +18,13 @@ import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '@ui-kitten/components';
 import Constants from 'expo-constants';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import NetInfo from '@react-native-community/netinfo';
-
-import Api from '../apis';
 
 export default function Settings({ navigation }) {
-  const { darkMode, setDarkMode, useUserTheme, setUseUserTheme, setDevPass } =
+  const { darkMode, setDarkMode, useUserTheme, setUseUserTheme } =
     useContext(AppDataContext);
   const [feedback, setFeedback] = useState('');
   const theme = useTheme();
   const scheme = useColorScheme();
-
-  const onSubmitFeedback = async () => {
-    const state = await NetInfo.fetch();
-    if (!feedback) {
-      return;
-    }
-    if (state.isConnected !== true) {
-      alert('No internet connection');
-      return;
-    }
-
-    // Check for auth first
-    const response = await Api.authDev(feedback);
-    if (response?.status == '200') {
-      setDevPass(feedback);
-      AsyncStorage.setItem('devPass', feedback);
-    } else {
-      setDevPass(null);
-      AsyncStorage.removeItem('devPass');
-      // Send feedback
-      const response = await Api.sendFeedback(feedback);
-      if (response.status == '200') {
-        alert('Feedback sent!');
-        setFeedback('');
-      } else {
-        alert('Error sending feedback');
-      }
-    }
-  };
 
   return (
     <TouchableWithoutFeedback
@@ -94,10 +62,7 @@ export default function Settings({ navigation }) {
             onChangeText={setFeedback}
             value={feedback}
           />
-          <Button
-            style={{ marginBottom: 20 }}
-            onPress={onSubmitFeedback}
-            disabled={!feedback}>
+          <Button style={{ marginBottom: 20 }} disabled={!feedback}>
             Submit Feedback
           </Button>
           <Divider />

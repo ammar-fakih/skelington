@@ -9,7 +9,6 @@ import { Platform } from 'react-native';
 import Events from './Events';
 import Settings from './Settings';
 import AddEvent from './AddEvent';
-import FilterEvents from './FilterEvents';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -23,16 +22,25 @@ export default function Main() {
       screenOptions={({ route }) => ({
         tabBarHideOnKeyboard: true,
         tabBarIcon: ({ focused, color, size }) => {
-          let iconName;
+          type IconName =
+            | 'flash-sharp'
+            | 'flash-outline'
+            | 'add-circle-sharp'
+            | 'add-circle-outline';
+          let iconName: IconName = 'flash-sharp';
 
           if (route.name === 'Events') {
             iconName = focused ? 'flash-sharp' : 'flash-outline';
-          } else if (route.name === 'Settings') {
-            iconName = focused ? 'ios-settings' : 'ios-settings-outline';
           } else if (route.name === 'Add Event') {
             iconName = focused ? 'add-circle-sharp' : 'add-circle-outline';
           }
-          return <Ionicons name={iconName} size={size * 1.2} color={color} />;
+          return (
+            <Ionicons
+              name={iconName}
+              size={focused ? size * 1.3 : size * 1.2}
+              color={color}
+            />
+          );
         },
         tabBarLabelStyle: {
           fontSize: 15,
@@ -57,9 +65,6 @@ const EventsHandler = () => {
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="EventsPage" component={Events} />
       <Stack.Screen name="Settings" component={Settings} />
-      <Stack.Group screenOptions={{ presentation: 'modal' }}>
-        <Stack.Screen name="FilterEvents" component={FilterEvents} />
-      </Stack.Group>
     </Stack.Navigator>
   );
 };
