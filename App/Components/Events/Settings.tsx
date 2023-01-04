@@ -13,14 +13,14 @@ import {
   TouchableOpacity,
   useColorScheme,
 } from 'react-native';
-import { AppDataContext } from '../contexts';
+import { AppDataContext } from '../../contexts';
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '@ui-kitten/components';
 import Constants from 'expo-constants';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import NetInfo from '@react-native-community/netinfo';
 
-import Api from '../apis';
+import Api from '../../apis';
 
 export default function Settings({ navigation }) {
   const { darkMode, setDarkMode, useUserTheme, setUseUserTheme, setDevPass } =

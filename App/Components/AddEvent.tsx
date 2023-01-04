@@ -24,7 +24,7 @@ import Constants from 'expo-constants';
 import DateTimePicker from '@react-native-community/datetimepicker';
 
 import { AppDataContext } from '../contexts';
-import { formatAMPM } from '../globalFunctions';
+import { formatAMPM } from '../../globalFunctions';
 
 const collegeOptions = [
   'Harvey Mudd',

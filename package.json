@@ -8,6 +8,7 @@
     "ios": "expo start --ios",
     "web": "expo start --web"
   },
+  "resolutions": { "@types/react": "~17.0.21" },
   "dependencies": {
     "@eva-design/eva": "^2.1.1",
     "@expo/webpack-config": "^0.17.3",

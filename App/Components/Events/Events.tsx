@@ -7,8 +7,8 @@ import {
   Spinner,
   Text,
 } from '@ui-kitten/components';
-import { AppDataContext } from '../contexts';
-import { FormatDate, FormatTimeRange } from '../globalFunctions';
+import { AppDataContext } from '../../contexts';
+import { FormatDate, FormatTimeRange } from '../../../globalFunctions';
 import { RefreshControl, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '@ui-kitten/components';

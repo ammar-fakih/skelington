@@ -6,10 +6,10 @@ import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '@ui-kitten/components';
 import { Platform } from 'react-native';
 
-import Events from './Events';
-import Settings from './Settings';
+import Events from './Events/Events';
+import Settings from './Events/Settings';
 import AddEvent from './AddEvent';
-import FilterEvents from './FilterEvents';
+import FilterEvents from './Events/FilterEvents';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();

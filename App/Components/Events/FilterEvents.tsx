@@ -4,8 +4,8 @@ import { useContext } from 'react';
 import { useTheme } from '@ui-kitten/components';
 import { Ionicons } from '@expo/vector-icons';
 
-import { AppDataContext } from '../contexts';
-import { eventTypeOptions } from '../constants';
+import { AppDataContext } from '../../contexts';
+import { eventTypeOptions } from '../../constants';
 
 export default function ({ navigation }) {
   const { refineList, typeCheckBoxes, setTypeCheckBoxes } =
